@@ -6,6 +6,7 @@ project(zlib C)
 set(VERSION "1.2.11.1")
 
 option(ZLIB_EXAMPLES "Build zlib example programs" ON)
+option(ZLIB_MINIZIP "Build contrib/minizip alongside zlib" OFF)
 
 set(INSTALL_BIN_DIR "${CMAKE_INSTALL_PREFIX}/bin" CACHE PATH "Installation directory for executables")
 set(INSTALL_LIB_DIR "${CMAKE_INSTALL_PREFIX}/lib" CACHE PATH "Installation directory for libraries")
@@ -192,6 +193,26 @@ if(NOT SKIP_INSTALL_FILES AND NOT SKIP_INSTALL_ALL )
     install(FILES ${ZLIB_PC} DESTINATION "${INSTALL_PKGCONFIG_DIR}")
 endif()
 
+#============================================================================
+# contrib/minizip
+#============================================================================
+
+if(ZLIB_MINIZIP)
+    add_library(minizip STATIC
+        contrib/minizip/ioapi.c
+        contrib/minizip/ioapi.h
+        contrib/minizip/unzip.c
+        contrib/minizip/unzip.h
+        contrib/minizip/zip.c
+        contrib/minizip/zip.h
+        )
+    target_link_libraries(minizip zlibstatic)
+    target_include_directories(minizip INTERFACE
+        contrib/minizip
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_CURRENT_BINARY_DIR}
+        )
+endif(ZLIB_MINIZIP)
 #============================================================================
 # Example binaries
 #============================================================================
