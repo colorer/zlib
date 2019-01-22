@@ -249,7 +249,7 @@ if(ZLIB_MINIZIP)
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_CURRENT_BINARY_DIR}
         )
-    add_library(ZLIB::MINIZIB ALIAS minizip)
+    add_library(ZLIB::MINIZIP ALIAS minizip)
 endif(ZLIB_MINIZIP)
 
 #============================================================================
