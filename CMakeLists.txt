@@ -1,9 +1,12 @@
-cmake_minimum_required(VERSION 2.4.4)
+cmake_minimum_required(VERSION 3.0.2)
+if(POLICY CMP0048)
+    cmake_policy(SET CMP0048 NEW)
+endif()
 set(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS ON)
 
-project(zlib C)
+project(ZLIB VERSION "1.2.11.1" LANGUAGES C)
 
-set(VERSION "1.2.11.1")
+set(VERSION "${PROJECT_VERSION}")
 
 option(ZLIB_EXAMPLES "Build zlib example programs" ON)
 option(ZLIB_MINIZIP "Build contrib/minizip alongside zlib" OFF)
