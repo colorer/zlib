@@ -16,6 +16,7 @@ option(SKIP_INSTALL_ALL "Skip installation of everything" OFF)
 option(SKIP_INSTALL_FILES "Skip installation of manual pages and pkgconfig files" OFF)
 option(SKIP_INSTALL_HEADERS "Skip installation of headers" OFF)
 option(SKIP_INSTALL_LIBRARIES "Skip installation of binaries, libraries, and symbol files" OFF)
+option(ZLIB_BUILD_SHARED_RUNTIME "Build with shared linked runtine library (MSVC)" ON)
 
 set(INSTALL_BIN_DIR "${CMAKE_INSTALL_PREFIX}/bin" CACHE PATH "Installation directory for executables")
 set(INSTALL_LIB_DIR "${CMAKE_INSTALL_PREFIX}/lib" CACHE PATH "Installation directory for libraries")
@@ -146,6 +147,20 @@ if(BUILD_SHARED_LIBS AND (MINGW OR CYGWIN))
                             -o ${CMAKE_CURRENT_BINARY_DIR}/zlib1rc.obj
                             -i ${CMAKE_CURRENT_SOURCE_DIR}/win32/zlib1.rc)
     set(ZLIB_DLL_SRCS ${CMAKE_CURRENT_BINARY_DIR}/zlib1rc.obj)
+endif()
+
+if(MSVC)
+    if(NOT ZLIB_BUILD_SHARED_RUNTIME)
+        set(CompilerFlags
+            CMAKE_C_FLAGS
+            CMAKE_C_FLAGS_DEBUG
+            CMAKE_C_FLAGS_RELEASE
+            )
+        foreach(CompilerFlag ${CompilerFlags})
+            string(REPLACE "/MDd" "/MTd" ${CompilerFlag} "${${CompilerFlag}}")
+            string(REPLACE "/MD" "/MT" ${CompilerFlag} "${${CompilerFlag}}")
+        endforeach()
+    endif()
 endif()
 
 if(ZLIB_BUILD_SHARED_LIBS)
